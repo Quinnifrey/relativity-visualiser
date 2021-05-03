@@ -10,43 +10,41 @@ function laplaceTransform(sketch, speed) {
   sketch.applyMatrix(gamma, -gamma * b, -gamma * b, gamma, 0, 0); // p5JS
 }
 
+// defines number of notches on the axis
+const vgrid = 11.0; //vertical - time
+const hgrid = 21.0; //horizontal - space
+
+// defines borders
+const borders = {
+  top: 20,
+  right: 20,
+  bottom: 20,
+  left: 20,
+};
+
+// defines size of notches
+const notchr = 10;
+
+// defines colours
+let colors = {};
+
+// defines grid size
+const grid = {
+  winw: null,
+  winh: null,
+  wspace: null,
+  hspace: null,
+};
+
 /**
+ * P5.js constructor used to create sketch in instance mode.
  *
- * @param {*} sketch
+ * @see https://p5js.org/reference/#/p5/p5
  */
-const relativitySketch = (sketch) => {
-  // defines number of notches on the axis
-  const vgrid = 11.0; //vertical - time
-  const hgrid = 21.0; //horizontal - space
-
-  // defines borders
-  const borders = {
-    top: 20,
-    right: 20,
-    bottom: 20,
-    left: 20,
-  };
-
-  // defines size of notches
-  const notchr = 10;
-
-  // defines colours
-  let colors = {};
-
-  // defines grid size
-  let grid = {
-    winw: null,
-    winh: null,
-    wspace: null,
-    hspace: null,
-  };
-
+const relativitySketchConstructor = (sketch) => {
   sketch.setup = () => {
     // initialises observers
     const { observers } = window.sketchOptions;
-    observers.push(new Observer("red", 0, true));
-    observers.push(new Observer("green", 0.5, false));
-    observers.push(new Observer("blue", -0.25, false));
 
     //
     sketch.createCanvas(1200, 600);
@@ -67,9 +65,8 @@ const relativitySketch = (sketch) => {
     grid.wspace = grid.winw / (hgrid - 1);
     grid.hspace = grid.winh / (vgrid - 1);
 
-    // noLoop();
-
     //
+    sketch.noLoop();
   };
 
   sketch.draw = () => {
@@ -97,8 +94,8 @@ const relativitySketch = (sketch) => {
   function drawLightlines() {
     sketch.stroke(colors.yellow);
     sketch.strokeWeight(5);
-    sketch.line(0, 0, sketch.height, sketch.height - 20);
-    sketch.line(0, 0, -sketch.height, sketch.height - 20);
+    sketch.line(0, 0, grid.winh + borders.right, grid.winh);
+    sketch.line(0, 0, -grid.winh - borders.left, grid.winh);
   }
 
   function drawObserver(observer) {

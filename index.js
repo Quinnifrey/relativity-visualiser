@@ -12,23 +12,21 @@ class Observer {
 // Setup...
 document.addEventListener("DOMContentLoaded", function (event) {
   setupSketchOptions();
+  addObservers();
 
   //
-  console.log('Setting up sketch...');
-
-  let sketch = new p5(relativitySketch, "sketch");
+  console.log("Setting up sketch...");
+  window.sketch = new p5(relativitySketchConstructor, "sketch");
 
   //
-  console.log('Setting up event listeners...');
+  console.log("Setting up event listeners...");
   setupEventListeners(sketch);
-
 });
 
 /**
  *
- * @param {*} params
  */
-function setupSketchOptions(params) {
+function setupSketchOptions() {
   //
   const observers = [];
   let activeObservers = new Set();
@@ -45,8 +43,19 @@ function setupSketchOptions(params) {
 /**
  *
  */
+function addObservers() {
+  const { observers } = window.sketchOptions;
+
+  observers.push(new Observer("red", 0, true));
+  observers.push(new Observer("green", 0.5, false));
+  observers.push(new Observer("blue", -0.25, false));
+}
+
+/**
+ *
+ */
 function setupEventListeners() {
   document.getElementById("backButton").addEventListener("click", () => {
-    alert("BACK");
+    // alert("BACK");
   });
 }

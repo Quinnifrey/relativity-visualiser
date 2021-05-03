@@ -3,17 +3,59 @@
     <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
     <script src="sketch.js"></script>
     <script src="index.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/latex.css/style.min.css" />
   </head>
+
+  <style type="text/css">
+    @media (min-width: 100ch) {
+      .popout {
+        display: flex;
+
+        max-width: 100vw;
+        margin-left: calc(-50vw + 40ch);
+        margin-right: calc(-50vw + 40ch);
+      }
+    }
+
+    #sketch {
+      margin: 4rem auto;
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: white;
+      border: 1px solid black;
+    }
+
+    #sketch canvas {
+      max-width: 100%;
+      height: auto !important;
+    }
+  </style>
+
   <body>
     <main>
-      <div id="sketch"></div>
-
-      <div style="display: flex;">
-        <button id="backButton">-</button>
-        <button id="forwardButton">-</button>
+      <div class="popout">
+        <div id="sketch"></div>
       </div>
+
+      <fieldset id="forms__select">
+        <legend>
+          <select>
+            <option>Observer 1</option>
+            <option>Observer 2</option>
+            <option>Observer 3</option>
+          </select>
+        </legend>
+
+        <p>
+
+        </p>
+      </fieldset>
+
+      <p style="display:flex; justify-content: space-between;">
+        <button id="backButton" style="align-self: flex-start;">Previous</button>
+        <button id="forwardButton" style="align-self: flex-end;">Next</button>
+      </p>
     </main>
-
-
   </body>
 </html>
