@@ -1,14 +1,20 @@
 <html>
   <head>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
+
     <script src="sketch.js"></script>
     <script src="index.js"></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/latex.css/style.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/latex.css@1.5.0/style.min.css"
+    />
   </head>
 
   <style type="text/css">
-    @media (min-width: 100ch) {
+    @media (min-width: 80ch) {
       .popout {
         display: flex;
 
@@ -19,9 +25,7 @@
     }
 
     #sketch {
-      margin: 4rem auto;
-      margin-top: 1rem;
-      padding: 1rem;
+      margin: 2rem auto;
       background-color: white;
       border: 1px solid black;
     }
@@ -30,32 +34,103 @@
       max-width: 100%;
       height: auto !important;
     }
+
+    .controls .observer-details {
+      display: grid;
+
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .controls .buttons-container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .observer-details table {
+      width: 100%;
+    }
+
+    .observer-details table th {
+      /* text-align: right; */
+    }
+
+    .observer-details .color-box {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+    }
   </style>
 
   <body>
-    <main>
+    <main id="app">
+      <h1>Relativity Visualiser</h1>
+
+      <!-- <p class="author">
+        Quinn Amores <br />
+        <small> With help from Katie Baker & Jack Fletcher</small>
+      </p> -->
+
+      <!-- Sketch-->
       <div class="popout">
         <div id="sketch"></div>
       </div>
 
-      <fieldset id="forms__select">
-        <legend>
-          <select>
-            <option>Observer 1</option>
-            <option>Observer 2</option>
-            <option>Observer 3</option>
-          </select>
-        </legend>
+      <!-- Controls-->
+      <sketch-controls inline-template>
+        <div class="controls">
+          <fieldset>
+            <legend>
+              <select v-model="observerSelected">
+                <option
+                  v-for="option in observersOptions"
+                  v-bind:value="option.value"
+                >
+                  {{ option.text }}
+                </option>
+              </select>
+            </legend>
 
-        <p>
+            <observer-details inline-template>
+              <div class="observer-details">
+                <div>
+                  <table>
+                    <tbody>
+                  <tr>
+                        <th>Color</th>
+                        <td style="text-align: right;">
+                          <div class="color-box" :style="{'background-color': observer.color}"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Relative speed</th>
+                        <td>{{ relativeSpeed }}c</td>
+                      </tr>
+                      <tr>
+                        <th>Time dilation</th>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <th>Length contraction</th>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
-        </p>
-      </fieldset>
+                <div>
+                  <button @click="matchSpeed">Match perspective speed</button>
+                </div>
+              </div>
+            </observer-details>
+          </fieldset>
 
-      <p style="display:flex; justify-content: space-between;">
-        <button id="backButton" style="align-self: flex-start;">Previous</button>
-        <button id="forwardButton" style="align-self: flex-end;">Next</button>
-      </p>
+          <p class="buttons-container">
+            <button @click="previousObserver">Previous</button>
+            <button @click="nextObserver">Next</button>
+          </p>
+        </div>
+      </sketch-controls>
     </main>
   </body>
 </html>
