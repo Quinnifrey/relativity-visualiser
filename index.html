@@ -1,5 +1,10 @@
 <html>
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Relativity Visualiser</title>
+
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
@@ -11,56 +16,9 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/latex.css@1.5.0/style.min.css"
     />
+
+    <link rel="stylesheet" href="styles.css" />
   </head>
-
-  <style type="text/css">
-    @media (min-width: 80ch) {
-      .popout {
-        display: flex;
-
-        max-width: 100vw;
-        margin-left: calc(-50vw + 40ch);
-        margin-right: calc(-50vw + 40ch);
-      }
-    }
-
-    #sketch {
-      margin: 2rem auto;
-      background-color: white;
-      border: 1px solid black;
-    }
-
-    #sketch canvas {
-      max-width: 100%;
-      height: auto !important;
-    }
-
-    .controls .observer-details {
-      display: grid;
-
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-
-    .controls .buttons-container {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .observer-details table {
-      width: 100%;
-    }
-
-    .observer-details table th {
-      /* text-align: right; */
-    }
-
-    .observer-details .color-box {
-      display: inline-block;
-      width: 1rem;
-      height: 1rem;
-    }
-  </style>
 
   <body>
     <main id="app">
@@ -73,7 +31,7 @@
 
       <!-- Sketch-->
       <div class="popout">
-        <div id="sketch"></div>
+        <div id="sketch" class="sketch"></div>
       </div>
 
       <!-- Controls-->
@@ -96,38 +54,50 @@
                 <div>
                   <table>
                     <tbody>
-                  <tr>
-                        <th>Color</th>
-                        <td style="text-align: right;">
-                          <div class="color-box" :style="{'background-color': observer.color}"></div>
+                      <tr>
+                        <th scope="row">Color</th>
+                        <td style="min-width: 5rem">
+                          <div
+                            class="color-box"
+                            :style="{'background-color': observer.color}"
+                          ></div>
                         </td>
                       </tr>
                       <tr>
-                        <th>Relative speed</th>
+                        <th scope="row">Relative speed</th>
                         <td>{{ relativeSpeed }}c</td>
                       </tr>
                       <tr>
-                        <th>Time dilation</th>
+                        <th scope="row">Time dilation</th>
                         <td></td>
                       </tr>
                       <tr>
-                        <th>Length contraction</th>
+                        <th scope="row">Length contraction</th>
                         <td></td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
 
-                <div>
+                <div class="action-buttons">
                   <button @click="matchSpeed">Match perspective speed</button>
+
+                  <!-- Gridlines -->
+                  <button
+                    v-if="observer.showGrid"
+                    @click="observer.showGrid = false"
+                  >
+                    Hide axes
+                  </button>
+                  <button v-else @click="observer.showGrid = true">Show axes</button>
                 </div>
               </div>
             </observer-details>
           </fieldset>
 
           <p class="buttons-container">
-            <button @click="previousObserver">Previous</button>
-            <button @click="nextObserver">Next</button>
+            <button @click="previousObserver">Previous observer</button>
+            <button @click="nextObserver">Next observer</button>
           </p>
         </div>
       </sketch-controls>
