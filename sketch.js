@@ -303,13 +303,17 @@ const relativitySketchConstructor = (sketch) => {
     //
 
     sketch.strokeWeight(8);
+    sketch.push();
+    sketch.scale(1,-1);
+    sketch.imageMode(sketch.CENTER)
     for (let i = 1; i < gridNotches; i++) {
       //sketch.point(vector.x * i, vector.y * i);
       //sketch.strokeWeight(0)
       //sketch.fill(observer.color)
       //sketch.rect(vector.x * i - 20, vector.y * i - 20,40,40);
-      sketch.image(tacocat, vector.x * i - 20, vector.y * i - 20);
+      sketch.image(tacocat, vector.x * i, - vector.y * i);
     }
+    sketch.pop();
     //
     sketch.pop();
   }
