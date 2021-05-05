@@ -143,13 +143,25 @@ function setupControls(options) {
         return observer;
       },
       relativeSpeed() {
-        let { observers, currentObserverIndex, perspectiveSpeed } = options;
+        let { perspectiveSpeed } = options;
 
         const speed =
           (this.observer.speed + perspectiveSpeed) /
           (1 + this.observer.speed * perspectiveSpeed);
 
         return speed.toLocaleString(undefined, {
+          minimumFractionDigits: 3,
+          maximumFractionDigits: 3,
+        });
+      },
+      gamma() {
+        //let { observers, currentObserverIndex, perspectiveSpeed } = options;
+
+        const theta = this.relativeSpeed * (Math.PI / 4);
+        const b = Math.tan(theta);
+        const gamma = 1 / Math.sqrt(1 - b * b);
+
+        return gamma.toLocaleString(undefined, {
           minimumFractionDigits: 3,
           maximumFractionDigits: 3,
         });

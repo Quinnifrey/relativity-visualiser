@@ -37,7 +37,6 @@ const grid = {
   gap: null,
 };
 
-
 /**
  * P5.js constructor used to create sketch in instance mode.
  *
@@ -54,7 +53,6 @@ const relativitySketchConstructor = (sketch) => {
     // initialises observers
     const { observers } = window.sketchOptions;
 
-
     //
     sketch.createCanvas(1200, 600 + margin); // Adding margin forces the margin to be equal on all sides
 
@@ -66,6 +64,7 @@ const relativitySketchConstructor = (sketch) => {
       grey: sketch.color("grey"),
       black: sketch.color("black"),
       yellow: sketch.color("yellow"),
+      white: sketch.color("white"),
     };
 
     //
@@ -80,6 +79,9 @@ const relativitySketchConstructor = (sketch) => {
 
   sketch.draw = () => {
     sketch.background(255);
+
+    drawAxesMarkers();
+
     center();
 
     sketch.push();
@@ -109,7 +111,10 @@ const relativitySketchConstructor = (sketch) => {
     let { perspectiveSpeed, targetPerspectiveSpeed } = window.sketchOptions;
     sketch.applyMatrix(lorentzTransform(perspectiveSpeed));
 
-    if (Math.abs(targetPerspectiveSpeed - perspectiveSpeed) < perspectiveAcceleration) {
+    if (
+      Math.abs(targetPerspectiveSpeed - perspectiveSpeed) <
+      perspectiveAcceleration
+    ) {
       perspectiveSpeed = targetPerspectiveSpeed;
     } else if (targetPerspectiveSpeed > perspectiveSpeed) {
       perspectiveSpeed += perspectiveAcceleration;
@@ -119,7 +124,7 @@ const relativitySketchConstructor = (sketch) => {
       console.warn("This should never happen");
     }
 
-    window.sketchOptions.perspectiveSpeed = perspectiveSpeed
+    window.sketchOptions.perspectiveSpeed = perspectiveSpeed;
   }
 
   function drawLightlines() {
@@ -127,6 +132,67 @@ const relativitySketchConstructor = (sketch) => {
     sketch.strokeWeight(5);
     sketch.line(0, 0, grid.windowHeight + margin, grid.windowHeight + margin);
     sketch.line(0, 0, -grid.windowHeight - margin, grid.windowHeight + margin);
+  }
+
+  function drawAxesMarkers() {
+    sketch.stroke(colors.black);
+    sketch.textAlign(sketch.CENTER, sketch.CENTER);
+    sketch.textSize(margin / 2);
+
+    sketch.strokeWeight(2);
+
+    sketch.push();
+
+    sketch.translate(margin / 2, sketch.height / 2);
+    // Top time line
+    sketch.line(0, -sketch.height / 4, 0, -margin);
+    // Time arrow left
+    sketch.line(
+      0,
+      -sketch.height / 4,
+      -margin / 4,
+      (-sketch.height + margin) / 4
+    );
+    // Time arrow right
+    sketch.line(
+      0,
+      -sketch.height / 4,
+      margin / 4,
+      (-sketch.height + margin) / 4
+    );
+    // Bottom time line
+    sketch.line(0, sketch.height / 4, 0, margin);
+    sketch.pop();
+
+    sketch.push();
+
+    sketch.translate(sketch.width / 2, sketch.height - margin / 2);
+
+    // Left space line
+    sketch.line(-sketch.width / 4, 0, -margin, 0);
+    // Left up arrow
+    sketch.line(-sketch.width / 4, 0, (margin - sketch.width) / 4, -margin / 4);
+    // Left down arrow
+    sketch.line(-sketch.width / 4, 0, (margin - sketch.width) / 4, margin / 4);
+
+    // Right space line
+    sketch.line(sketch.width / 4, 0, margin, 0);
+    // Right up arrow
+    sketch.line(sketch.width / 4, 0, (-margin + sketch.width) / 4, -margin / 4);
+    // Right down arrow
+    sketch.line(sketch.width / 4, 0, (-margin + sketch.width) / 4, margin / 4);
+
+    sketch.pop();
+
+    sketch.strokeWeight(0);
+
+    sketch.push();
+    sketch.rotate(-sketch.HALF_PI);
+    sketch.text("Time", -sketch.height / 2, margin / 2);
+    sketch.pop();
+
+    sketch.text("Space", sketch.width / 2, sketch.height - (margin / 2));
+
   }
 
   function drawObserver(observer) {
@@ -152,7 +218,7 @@ const relativitySketchConstructor = (sketch) => {
 
     //
     for (let i = 0; i < gridNotches; i++) {
-      for (let j = -gridNotches; j < gridNotches; j++) {
+      for (let j = 1-gridNotches ; j < gridNotches; j++) {
         const x = j * grid.gap;
         const y = i * grid.gap;
         sketch.point(x, y);
