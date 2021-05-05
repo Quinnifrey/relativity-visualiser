@@ -80,9 +80,10 @@ const relativitySketchConstructor = (sketch) => {
   sketch.draw = () => {
     sketch.background(255);
 
-    drawAxesMarkers();
 
+    sketch.push();
     center();
+
 
     sketch.push();
 
@@ -95,8 +96,15 @@ const relativitySketchConstructor = (sketch) => {
     for (const observer of observers) {
       drawObserver(observer);
     }
+
     sketch.pop();
+
+
     drawLightlines();
+
+    sketch.pop();
+    drawMask();
+    drawAxesMarkers();
   };
 
   function center() {
@@ -134,8 +142,32 @@ const relativitySketchConstructor = (sketch) => {
     sketch.line(0, 0, -grid.windowHeight - margin, grid.windowHeight + margin);
   }
 
+  function drawMask() {
+    sketch.strokeWeight(0);
+    sketch.fill("rgba(255,255,255, .8)");
+
+
+    sketch.beginShape();
+    sketch.vertex(0, 0);
+    sketch.vertex(sketch.width/2,sketch.height-margin);
+    sketch.vertex(sketch.width, 0);
+    sketch.vertex(sketch.width, sketch.height);
+    sketch.vertex(0, sketch.height);
+    sketch.endShape(sketch.CLOSE);
+
+    // sketch.triangle(
+    //   +margin / 4,
+    //   -margin / 4,
+    //   -grid.windowHeight - margin / 4,
+    //   grid.windowHeight + margin / 4,
+    //   -grid.windowHeight - margin / 4,
+    //   -margin / 4
+    // );
+  }
+
   function drawAxesMarkers() {
     sketch.stroke(colors.black);
+    sketch.fill(colors.black);
     sketch.textAlign(sketch.CENTER, sketch.CENTER);
     sketch.textSize(margin / 2);
 
@@ -191,8 +223,7 @@ const relativitySketchConstructor = (sketch) => {
     sketch.text("Time", -sketch.height / 2, margin / 2);
     sketch.pop();
 
-    sketch.text("Space", sketch.width / 2, sketch.height - (margin / 2));
-
+    sketch.text("Space", sketch.width / 2, sketch.height - margin / 2);
   }
 
   function drawObserver(observer) {
@@ -218,7 +249,7 @@ const relativitySketchConstructor = (sketch) => {
 
     //
     for (let i = 0; i < gridNotches; i++) {
-      for (let j = 1-gridNotches ; j < gridNotches; j++) {
+      for (let j = 1 - gridNotches; j < gridNotches; j++) {
         const x = j * grid.gap;
         const y = i * grid.gap;
         sketch.point(x, y);
