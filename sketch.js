@@ -28,9 +28,6 @@ const notchr = 10;
 
 const perspectiveAcceleration = 0.01;
 
-// defines colours
-let colors = {};
-
 // defines grid size
 const grid = {
   windowHeight: null,
@@ -43,11 +40,32 @@ const grid = {
  * @see https://p5js.org/reference/#/p5/p5
  */
 const relativitySketchConstructor = (sketch) => {
-  sketch.preload = () => {
+  //sketch.preload = () => {};
+
+  const rocket = sketch.loadImage(
+    "https://kauhat.github.io/relativity-visualiser/Rocket.png"
+  );
+
+  const tacocat = sketch.loadImage(
+    "https://kauhat.github.io/relativity-visualiser/tacocat.png"
+  );
+
+  const colors = {
+    red: sketch.color("red"),
+    green: sketch.color("green"),
+    blue: sketch.color("blue"),
+    grey: sketch.color("grey"),
+    black: sketch.color("black"),
+    yellow: sketch.color("yellow"),
+    white: sketch.color("white"),
   };
-const rocket = sketch.loadImage(
-  "https://kauhat.github.io/relativity-visualiser/Rocket.png"
-);
+
+  //
+  const sprites = [
+    ["Rocket", colors.red, rocket],
+    ["TacoCat", colors.blue, tacocat],
+  ];
+  //
 
   sketch.setup = () => {
     // initialises observers
@@ -57,19 +75,7 @@ const rocket = sketch.loadImage(
     sketch.createCanvas(1200, 600 + margin); // Adding margin forces the margin to be equal on all sides
 
     //
-    colors = {
-      red: sketch.color("red"),
-      green: sketch.color("green"),
-      blue: sketch.color("blue"),
-      grey: sketch.color("grey"),
-      black: sketch.color("black"),
-      yellow: sketch.color("yellow"),
-      white: sketch.color("white"),
-    };
 
-    //
-
-    //
     grid.windowHeight = sketch.height - margin * 2;
     grid.gap = grid.windowHeight / (gridNotches - 1);
 
@@ -80,10 +86,8 @@ const rocket = sketch.loadImage(
   sketch.draw = () => {
     sketch.background(255);
 
-
     sketch.push();
     center();
-
 
     sketch.push();
 
@@ -98,7 +102,6 @@ const rocket = sketch.loadImage(
     }
 
     sketch.pop();
-
 
     drawLightlines();
 
@@ -146,10 +149,9 @@ const rocket = sketch.loadImage(
     sketch.strokeWeight(0);
     sketch.fill("rgba(255,255,255, .8)");
 
-
     sketch.beginShape();
     sketch.vertex(0, 0);
-    sketch.vertex(sketch.width/2,sketch.height-margin);
+    sketch.vertex(sketch.width / 2, sketch.height - margin);
     sketch.vertex(sketch.width, 0);
     sketch.vertex(sketch.width, sketch.height);
     sketch.vertex(0, sketch.height);
@@ -285,7 +287,8 @@ const rocket = sketch.loadImage(
     const vector = sketch.createVector(0, grid.windowHeight);
     vector.div(gridNotches - 1);
 
-    sketch.stroke(observer.color);
+
+    sketch.stroke(sprites[observer.spriteIndex % sprites.length][1]);
 
     //
     sketch.strokeWeight(2);
@@ -304,14 +307,19 @@ const rocket = sketch.loadImage(
 
     sketch.strokeWeight(8);
     sketch.push();
-    sketch.scale(1,-1);
-    sketch.imageMode(sketch.CENTER)
+    sketch.scale(1, -1);
+    sketch.imageMode(sketch.CENTER);
+
     for (let i = 1; i < gridNotches; i++) {
       //sketch.point(vector.x * i, vector.y * i);
       //sketch.strokeWeight(0)
       //sketch.fill(observer.color)
       //sketch.rect(vector.x * i - 20, vector.y * i - 20,40,40);
-      sketch.image(rocket, vector.x * i, - vector.y * i);
+      sketch.image(
+        sprites[observer.spriteIndex % sprites.length][2],
+        vector.x * i,
+        -vector.y * i
+      );
     }
     sketch.pop();
     //

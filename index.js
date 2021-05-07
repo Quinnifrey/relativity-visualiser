@@ -2,8 +2,8 @@
  *
  */
 class Observer {
-  constructor(color, speed, showGrid) {
-    this.color = color;
+  constructor(spriteIndex, speed, showGrid) {
+    this.spriteIndex = spriteIndex;
     this.speed = speed;
     this.showGrid = showGrid;
   }
@@ -52,7 +52,7 @@ function setupSketchOptions() {
   //
   const observers = [];
   let currentObserverIndex = 0;
-  let currentColorIndex = 0;
+  //let currentColorIndex = 0;
   // let activeObservers = new Set();
 
   let perspectiveSpeed = 0;
@@ -63,7 +63,7 @@ function setupSketchOptions() {
     observers,
     currentObserverIndex,
     // activeObservers,
-    currentColorIndex,
+    //currentColorIndex,
     perspectiveSpeed,
     targetPerspectiveSpeed,
   });
@@ -75,15 +75,17 @@ function setupSketchOptions() {
   return options;
 }
 
+
+
 /**
  *
  */
 function addObservers(options) {
   const { observers } = options;
 
-  observers.push(new Observer("red", 0, true));
-  observers.push(new Observer("green", 0.8, false));
-  observers.push(new Observer("blue", -0.25, false));
+  observers.push(new Observer(0, 0.5, true));
+  observers.push(new Observer(1, 0, true));
+  observers.push(new Observer(2, -0.25, false));
 }
 
 /**
@@ -174,7 +176,9 @@ function setupControls(options) {
 
         const speed = relativeToAbsoluteSpeed(-relativeSpeed, perspectiveSpeed);
 
-        options.observers.push(new Observer("blue", speed, false));
+        options.observers.push(
+          new Observer(options.observers.length, speed, false)
+        );
       },
     },
   });
