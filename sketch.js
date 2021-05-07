@@ -43,11 +43,11 @@ const grid = {
  * @see https://p5js.org/reference/#/p5/p5
  */
 const relativitySketchConstructor = (sketch) => {
-  // sketch.preload = () => {
-  // };
-  const tacocat = sketch.loadImage(
-    "https://kauhat.github.io/relativity-visualiser/tacocat.png"
-  );
+  sketch.preload = () => {
+  };
+const rocket = sketch.loadImage(
+  "https://kauhat.github.io/relativity-visualiser/Rocket.png"
+);
 
   sketch.setup = () => {
     // initialises observers
@@ -311,7 +311,7 @@ const relativitySketchConstructor = (sketch) => {
       //sketch.strokeWeight(0)
       //sketch.fill(observer.color)
       //sketch.rect(vector.x * i - 20, vector.y * i - 20,40,40);
-      sketch.image(tacocat, vector.x * i, - vector.y * i);
+      sketch.image(rocket, vector.x * i, - vector.y * i);
     }
     sketch.pop();
     //

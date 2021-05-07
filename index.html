@@ -65,7 +65,7 @@
                       </tr>
                       <tr>
                         <th scope="row">Relative speed</th>
-                        <td>{{ relativeSpeed }}c</td>
+                        <td>{{ absoluteToRelativeSpeed }}c</td>
                       </tr>
                       <tr>
                         <th scope="row">Gamma</th>
@@ -85,7 +85,10 @@
                   >
                     Hide axes
                   </button>
-                  <button v-else @click="observer.showGrid = true">Show axes</button>
+                  <button v-else @click="observer.showGrid = true">
+                    Show axes
+                  </button>
+                  <button @click="changeSpeed">Change Observer Speed</button>
                 </div>
               </div>
             </observer-details>
@@ -93,6 +96,7 @@
 
           <p class="buttons-container">
             <button @click="previousObserver">Previous observer</button>
+            <button @click="addObserver">Add observer</button>
             <button @click="nextObserver">Next observer</button>
           </p>
         </div>

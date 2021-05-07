@@ -9,6 +9,28 @@ class Observer {
   }
 }
 
+function absoluteToRelativeSpeed(absoluteSpeed, perspectiveSpeed) {
+  const speed =
+    (absoluteSpeed + perspectiveSpeed) / (1 + absoluteSpeed * perspectiveSpeed);
+
+  return speed;
+}
+
+function relativeToAbsoluteSpeed(relativeSpeed, perspectiveSpeed) {
+  const speed =
+    (relativeSpeed - perspectiveSpeed) / (1 - relativeSpeed * perspectiveSpeed);
+
+  return speed;
+}
+
+function gamma(relativeSpeed) {
+  const theta = relativeSpeed * (Math.PI / 4);
+  const b = Math.tan(theta);
+  const gamma = 1 / Math.sqrt(1 - b * b);
+
+  return gamma;
+}
+
 // Setup when resources have loaded.
 window.addEventListener("load", function (event) {
   // Setup global sketch options.
@@ -30,6 +52,7 @@ function setupSketchOptions() {
   //
   const observers = [];
   let currentObserverIndex = 0;
+  let currentColorIndex = 0;
   // let activeObservers = new Set();
 
   let perspectiveSpeed = 0;
@@ -40,7 +63,7 @@ function setupSketchOptions() {
     observers,
     currentObserverIndex,
     // activeObservers,
-
+    currentColorIndex,
     perspectiveSpeed,
     targetPerspectiveSpeed,
   });
@@ -129,6 +152,30 @@ function setupControls(options) {
 
         options.currentObserverIndex = index;
       },
+
+      addObserver() {
+        let { perspectiveSpeed } = options;
+
+        //
+        const input = window.prompt(
+          `Observer speed relative to your current reference frame `,
+          0
+        );
+        const relativeSpeed = parseFloat(input);
+
+        if (
+          isNaN(relativeSpeed) ||
+          relativeSpeed < -0.999 ||
+          relativeSpeed > 0.999
+        ) {
+          alert(`Speed must be between -0.999 and +0.999`);
+          return;
+        }
+
+        const speed = relativeToAbsoluteSpeed(-relativeSpeed, perspectiveSpeed);
+
+        options.observers.push(new Observer("blue", speed, false));
+      },
     },
   });
 
@@ -142,26 +189,32 @@ function setupControls(options) {
 
         return observer;
       },
-      relativeSpeed() {
+      absoluteToRelativeSpeed() {
         let { perspectiveSpeed } = options;
 
         const speed =
-          (this.observer.speed + perspectiveSpeed) /
-          (1 + this.observer.speed * perspectiveSpeed);
+          0 - absoluteToRelativeSpeed(this.observer.speed, perspectiveSpeed);
 
-        return speed.toLocaleString(undefined, {
+        const bigSpeed = Math.floor(1000 * speed);
+        const smolSpeed = bigSpeed / 1000;
+
+        //return smolSpeed;
+        // return decimalAdjust("floor",speed,-3)
+        return smolSpeed.toLocaleString(undefined, {
           minimumFractionDigits: 3,
           maximumFractionDigits: 3,
         });
       },
+      // relativeToAbsoluteSpeed(input) {
+      //   let { perspectiveSpeed } = options;
+      //   const speed =
+      //     (input - perspectiveSpeed) / (1 - input * perspectiveSpeed);
+      //   return speed;
+      // },
       gamma() {
-        //let { observers, currentObserverIndex, perspectiveSpeed } = options;
+        let { perspectiveSpeed } = options;
 
-        const theta = this.relativeSpeed * (Math.PI / 4);
-        const b = Math.tan(theta);
-        const gamma = 1 / Math.sqrt(1 - b * b);
-
-        return gamma.toLocaleString(undefined, {
+        return gamma(perspectiveSpeed).toLocaleString(undefined, {
           minimumFractionDigits: 3,
           maximumFractionDigits: 3,
         });
@@ -173,6 +226,30 @@ function setupControls(options) {
 
         // Update sketch data.
         options.targetPerspectiveSpeed = -this.observer.speed;
+      },
+      changeSpeed() {
+        let { perspectiveSpeed } = options;
+
+        //
+        const input = window.prompt(
+          `Observer speed relative to your current reference frame `,
+          0
+        );
+
+        const relativeSpeed = parseFloat(input);
+
+        if (
+          isNaN(relativeSpeed) ||
+          relativeSpeed < -0.999 ||
+          relativeSpeed > 0.999
+        ) {
+          alert(`Speed must be between -0.999 and +0.999`);
+          return;
+        }
+
+        const speed = relativeToAbsoluteSpeed(-relativeSpeed, perspectiveSpeed);
+
+        this.observer.speed = speed;
       },
     },
   });
