@@ -264,7 +264,7 @@ const relativitySketchConstructor = (sketch) => {
 
 
     for (const observer of observers) {
-      sketch.point(0,0)
+
 
       //
       const speed = absoluteToRelativeSpeed(observer.speed, perspectiveSpeed);
