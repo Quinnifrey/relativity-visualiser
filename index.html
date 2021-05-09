@@ -37,70 +37,57 @@
       <!-- Controls-->
       <sketch-controls inline-template>
         <div class="controls">
-          <fieldset>
-            <legend>
-              <select v-model="observerSelected">
-                <option
-                  v-for="option in observersOptions"
-                  v-bind:value="option.value"
-                >
-                  {{ option.text }}
-                </option>
-              </select>
-            </legend>
+          <h3>Observer Table</h3>
+            <observers-table inline-template>
+              <div>
+                <table class="observers-table">
+                  <thead>
+                    <th>Image</th>
+                    <th>Colour</th>
+                    <th>Relative Speed</th>
+                    <th>Gamma</th>
+                    <th>Axis Toggle</th>
+                    <th>Match Speed</th>
+                    <th>Change Speed</th>
+                    <th>Delete Observer</th>
+                  </thead>
 
-            <observer-details inline-template>
-              <div class="observer-details">
-                <div>
-                  <table>
-                    <tbody>
-                      <tr>
-                        <th scope="row">Color</th>
-                        <td style="min-width: 5rem">
-                          <div
-                            class="color-box"
-                            :style="{'background-color': observer.color}"
-                          ></div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Relative speed</th>
-                        <td>{{ absoluteToRelativeSpeed }}c</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Gamma</th>
-                        <td>{{ gamma }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div class="action-buttons">
-                  <button @click="matchSpeed">Match perspective speed</button>
-
-                  <!-- Gridlines -->
-                  <button
-                    v-if="observer.showGrid"
-                    @click="observer.showGrid = false"
-                  >
-                    Hide axes
-                  </button>
-                  <button v-else @click="observer.showGrid = true">
-                    Show axes
-                  </button>
-                  <button @click="changeSpeed">Change Observer Speed</button>
-                </div>
+                  <tbody>
+                    <template v-for="(observer, index) in observers">
+                      <observers-table-row :observer="observer" :key="index" />
+                    </template>
+                  </tbody>
+                </table>
               </div>
-            </observer-details>
-          </fieldset>
+            </observers-table>
+
 
           <p class="buttons-container">
-            <button @click="previousObserver">Previous observer</button>
             <button @click="addObserver">Add observer</button>
-            <button @click="nextObserver">Next observer</button>
           </p>
         </div>
       </sketch-controls>
     </main>
   </body>
+
+  <script type="text/x-template" id="observers-table-row-template">
+    <tr>
+      <td>
+        <img :src="observer.spriteUrl()" />
+      </td>
+      <td>
+        <div
+          class="color-box"
+          :style="{ 'background-color': observer.color() }"
+        ></div>
+      </td>
+      <td>{{ relativeSpeed }}</td>
+      <td>{{ gamma }}</td>
+      <td><button v-if="observer.showGrid" @click="observer.showGrid = false"> Hide </button>
+          <button v-else @click="observer.showGrid = true"> Show </button></td>
+      <td><button @click="matchSpeed">Match Observer speed</button></td>
+      <td><button @click="changeSpeed">Change Observer Speed</button></td>
+      <td><button @click="deleteObserver">X</button></td>
+    </tr>
+  </script>
 </html>

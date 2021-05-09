@@ -10,7 +10,7 @@
 
 /* Sketch */
 .sketch {
-  margin: 2rem auto;
+  margin: 1rem auto;
   background-color: white;
   border: 1px solid black;
 }
@@ -44,6 +44,12 @@
   }
 }
 
+/*  */
+.observers-table {
+  margin: 1rem auto;
+}
+
+.observers-table,
 .observer-details table {
   width: 100%;
 }

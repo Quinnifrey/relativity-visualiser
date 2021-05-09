@@ -20,8 +20,10 @@ function lorentzTransform(speed) {
 // defines number of notches on the axis
 const gridNotches = 6.0; //vertical - time
 
-// defines margin
+// defines main sketch margin
 const margin = 40;
+
+const spacebarHeight = 80;
 
 // defines size of notches
 const notchr = 10;
@@ -34,6 +36,17 @@ const grid = {
   gap: null,
 };
 
+// Sketch colors.
+const colors = {
+  point: "black",
+  lines: "grey",
+  axis: "black",
+  axisText: "black",
+  spacebar: "black",
+  light: "#ffaa00",
+  mask: "rgba(255,255,255, .8)",
+};
+
 /**
  * P5.js constructor used to create sketch in instance mode.
  *
@@ -42,41 +55,31 @@ const grid = {
 const relativitySketchConstructor = (sketch) => {
   //sketch.preload = () => {};
 
-  const rocket = sketch.loadImage(
-    "https://kauhat.github.io/relativity-visualiser/Rocket.png"
-  );
+  // Map of sprite URLs pointing to loaded images.
+  const loadedSprites = new Map();
 
-  const tacocat = sketch.loadImage(
-    "https://kauhat.github.io/relativity-visualiser/tacocat.png"
-  );
+  // Load image if not already in map.
+  const getSprite = (url) => {
+    if (!loadedSprites.has(url)) {
+      // Image hasn't been loaded yet...
+      const image = sketch.loadImage(url);
+      loadedSprites.set(url, image);
+    }
 
-  const colors = {
-    red: sketch.color("red"),
-    green: sketch.color("green"),
-    blue: sketch.color("blue"),
-    grey: sketch.color("grey"),
-    black: sketch.color("black"),
-    yellow: sketch.color("yellow"),
-    white: sketch.color("white"),
+    return loadedSprites.get(url);
   };
 
   //
-  const sprites = [
-    ["Rocket", colors.red, rocket],
-    ["TacoCat", colors.blue, tacocat],
-  ];
-  //
-
   sketch.setup = () => {
     // initialises observers
     const { observers } = window.sketchOptions;
 
     //
-    sketch.createCanvas(1200, 600 + margin); // Adding margin forces the margin to be equal on all sides
+    sketch.createCanvas(1200, 600 + margin + spacebarHeight); // Adding margin forces the margin to be equal on all sides
 
     //
 
-    grid.windowHeight = sketch.height - margin * 2;
+    grid.windowHeight = sketch.height - margin * 2 - spacebarHeight;
     grid.gap = grid.windowHeight / (gridNotches - 1);
 
     //
@@ -107,7 +110,9 @@ const relativitySketchConstructor = (sketch) => {
 
     sketch.pop();
     drawMask();
+
     drawAxesMarkers();
+    drawSpacebar();
   };
 
   function center() {
@@ -115,7 +120,7 @@ const relativitySketchConstructor = (sketch) => {
     sketch.scale(1, -1);
 
     // Move to bottom middle
-    sketch.translate(sketch.width / 2, margin - sketch.height);
+    sketch.translate(sketch.width / 2, margin + spacebarHeight - sketch.height);
   }
 
   function applyPerspective() {
@@ -139,7 +144,7 @@ const relativitySketchConstructor = (sketch) => {
   }
 
   function drawLightlines() {
-    sketch.stroke(colors.yellow);
+    sketch.stroke(colors.light);
     sketch.strokeWeight(5);
     sketch.line(0, 0, grid.windowHeight + margin, grid.windowHeight + margin);
     sketch.line(0, 0, -grid.windowHeight - margin, grid.windowHeight + margin);
@@ -147,11 +152,11 @@ const relativitySketchConstructor = (sketch) => {
 
   function drawMask() {
     sketch.strokeWeight(0);
-    sketch.fill("rgba(255,255,255, .8)");
+    sketch.fill(colors.mask);
 
     sketch.beginShape();
     sketch.vertex(0, 0);
-    sketch.vertex(sketch.width / 2, sketch.height - margin);
+    sketch.vertex(sketch.width / 2, sketch.height - margin - spacebarHeight);
     sketch.vertex(sketch.width, 0);
     sketch.vertex(sketch.width, sketch.height);
     sketch.vertex(0, sketch.height);
@@ -168,8 +173,8 @@ const relativitySketchConstructor = (sketch) => {
   }
 
   function drawAxesMarkers() {
-    sketch.stroke(colors.black);
-    sketch.fill(colors.black);
+    sketch.stroke(colors.axis);
+    sketch.fill(colors.axisText);
     sketch.textAlign(sketch.CENTER, sketch.CENTER);
     sketch.textSize(margin / 2);
 
@@ -200,7 +205,10 @@ const relativitySketchConstructor = (sketch) => {
 
     sketch.push();
 
-    sketch.translate(sketch.width / 2, sketch.height - margin / 2);
+    sketch.translate(
+      sketch.width / 2,
+      sketch.height - (spacebarHeight + margin / 2)
+    );
 
     // Left space line
     sketch.line(-sketch.width / 4, 0, -margin, 0);
@@ -225,7 +233,50 @@ const relativitySketchConstructor = (sketch) => {
     sketch.text("Time", -sketch.height / 2, margin / 2);
     sketch.pop();
 
-    sketch.text("Space", sketch.width / 2, sketch.height - margin / 2);
+    sketch.text(
+      "Space",
+      sketch.width / 2,
+      sketch.height - (spacebarHeight + margin / 2)
+    );
+  }
+
+  function drawSpacebar() {
+    sketch.stroke(colors.spacebar);
+    sketch.strokeWeight(2);
+    sketch.imageMode(sketch.CENTER);
+
+    const { observers, perspectiveSpeed } = window.sketchOptions;
+
+    sketch.push();
+
+    const transformMatrix = lorentzTransform(perspectiveSpeed);
+    //console.log(transformMatrix)
+
+    // console.log(transformMatrix[0],
+    //   0,
+    //   transformMatrix[2],
+    //   0,
+    //   transformMatrix[4],
+    //   0)
+    sketch.translate(sketch.width / 2, sketch.height - spacebarHeight / 2);
+    sketch.line(-grid.windowHeight, 0, grid.windowHeight, 0);
+
+
+
+    for (const observer of observers) {
+      sketch.point(0,0)
+
+      //
+      const speed = absoluteToRelativeSpeed(observer.speed, perspectiveSpeed);
+
+      sketch.image(
+        getSprite(observer.spriteUrl()),
+        -speed * grid.windowHeight,
+        0
+      );
+    }
+
+    sketch.pop();
   }
 
   function drawObserver(observer) {
@@ -246,7 +297,7 @@ const relativitySketchConstructor = (sketch) => {
     //const { winw, winh, wspace, hspace } = grid;
 
     // draw grid.
-    sketch.stroke(colors.black);
+    sketch.stroke(colors.point);
     sketch.strokeWeight(4);
 
     //
@@ -259,7 +310,7 @@ const relativitySketchConstructor = (sketch) => {
     }
 
     // draw grid lines.
-    sketch.stroke(colors.grey);
+    sketch.stroke(colors.lines);
     sketch.strokeWeight(1);
 
     // Rows
@@ -287,8 +338,7 @@ const relativitySketchConstructor = (sketch) => {
     const vector = sketch.createVector(0, grid.windowHeight);
     vector.div(gridNotches - 1);
 
-
-    sketch.stroke(sprites[observer.spriteIndex % sprites.length][1]);
+    sketch.stroke(observer.color());
 
     //
     sketch.strokeWeight(2);
@@ -316,7 +366,7 @@ const relativitySketchConstructor = (sketch) => {
       //sketch.fill(observer.color)
       //sketch.rect(vector.x * i - 20, vector.y * i - 20,40,40);
       sketch.image(
-        sprites[observer.spriteIndex % sprites.length][2],
+        getSprite(observer.spriteUrl()),
         vector.x * i,
         -vector.y * i
       );
