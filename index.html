@@ -38,29 +38,27 @@
       <sketch-controls inline-template>
         <div class="controls">
           <h3>Observer Table</h3>
-            <observers-table inline-template>
-              <div>
-                <table class="observers-table">
-                  <thead>
-                    <th>Image</th>
-                    <th>Colour</th>
-                    <th>Relative Speed</th>
-                    <th>Gamma</th>
-                    <th>Axis Toggle</th>
-                    <th>Match Speed</th>
-                    <th>Change Speed</th>
-                    <th>Delete Observer</th>
-                  </thead>
+          <observers-table inline-template>
+            <div>
+              <table class="observers-table">
+                <thead>
+                  <th>Image</th>
+                  <th>Relative Speed</th>
+                  <th>Gamma</th>
+                  <th>Axis Toggle</th>
+                  <th>Match Speed</th>
+                  <th>Change Speed</th>
+                  <th>Delete Observer</th>
+                </thead>
 
-                  <tbody>
-                    <template v-for="(observer, index) in observers">
-                      <observers-table-row :observer="observer" :key="index" />
-                    </template>
-                  </tbody>
-                </table>
-              </div>
-            </observers-table>
-
+                <tbody>
+                  <template v-for="(observer, index) in observers">
+                    <observers-table-row :observer="observer" :key="index" />
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </observers-table>
 
           <p class="buttons-container">
             <button @click="addObserver">Add observer</button>
@@ -74,12 +72,6 @@
     <tr>
       <td>
         <img :src="observer.spriteUrl()" />
-      </td>
-      <td>
-        <div
-          class="color-box"
-          :style="{ 'background-color': observer.color() }"
-        ></div>
       </td>
       <td>{{ relativeSpeed }}</td>
       <td>{{ gamma }}</td>
