@@ -66,6 +66,10 @@ body {
   max-width: none;
 }
 
+.table-wrapper > table td > button {
+  width: 100%;
+}
+
 /* Controls */
 button {
   padding: 0.5em;

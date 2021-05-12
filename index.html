@@ -38,9 +38,9 @@
                     <th>Image</th>
                     <th>Speed</th>
                     <th>Gamma</th>
-                    <th>Axis Toggle</th>
-                    <th>Match Speed</th>
-                    <th>Change Speed</th>
+                    <th>Axis toggle</th>
+                    <th>Match speed</th>
+                    <th>Change speed</th>
                     <th>Delete</th>
                   </thead>
 
@@ -76,11 +76,19 @@
       </td>
       <td>{{ relativeSpeed }}</td>
       <td>{{ gamma }}</td>
-      <td><button v-if="observer.showGrid" @click="observer.showGrid = false"> Hide </button>
-          <button v-else @click="observer.showGrid = true"> Show </button></td>
-      <td><button @click="matchSpeed">Match</button></td>
-      <td><button @click="changeSpeed">Change</button></td>
-      <td><button @click="deleteObserver">💥</button></td>
+      <td>
+        <button v-if="observer.showGrid" @click="observer.showGrid = false"> Hide </button>
+        <button v-else @click="observer.showGrid = true"> Show </button>
+      </td>
+      <td>
+        <button @click="matchSpeed" title="Match observer speed">Match</button>
+      </td>
+      <td>
+        <button @click="changeSpeed" title="Change observer speed">Change</button>
+      </td>
+      <td>
+        <button @click="deleteObserver" title="Destroy observer">💥</button>
+      </td>
     </tr>
   </script>
 </html>
