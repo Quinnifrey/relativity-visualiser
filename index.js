@@ -58,9 +58,9 @@ const palette = [
 
 //
 const sprites = [
-  "https://kauhat.github.io/relativity-visualiser/Rocket.png",
-  "https://kauhat.github.io/relativity-visualiser/tacocat.png",
-  "https://kauhat.github.io/relativity-visualiser/spacedude.png",
+  "https://quinnifrey.github.io/relativity-visualiser/Rocket.png",
+  "https://quinnifrey.github.io/relativity-visualiser/tacocat.png",
+  "https://quinnifrey.github.io/relativity-visualiser/spacedude.png",
 ];
 
 // //
