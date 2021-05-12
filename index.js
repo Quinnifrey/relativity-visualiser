@@ -195,17 +195,16 @@ function setupControls(options) {
 
         const speed = relativeToAbsoluteSpeed(-relativeSpeed, perspectiveSpeed);
 
-        const spriteIndexes = options.observers.map(observer => observer.spriteIndex)
+        const spriteIndexes = options.observers.map(
+          (observer) => observer.spriteIndex
+        );
 
         let i = 0;
         do {
           i = i + 1;
         } while (spriteIndexes.includes(i));
 
-
-        options.observers.push(
-          new Observer(i, speed, false)
-        );
+        options.observers.push(new Observer(i, speed, false));
       },
     },
   });
@@ -423,8 +422,6 @@ function setupControls(options) {
   // Create Vue instance.
   var app = new Vue({
     el: "#app",
-    data: {
-      message: "Hello Vue!",
-    },
+    data: {},
   });
 }

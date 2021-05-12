@@ -24,48 +24,49 @@
     <main id="app">
       <h1>Relativity Visualiser</h1>
 
-      <!-- <p class="author">
-        Quinn Amores <br />
-        <small> With help from Katie Baker & Jack Fletcher</small>
-      </p> -->
-
       <!-- Sketch-->
       <div class="popout">
-        <div id="sketch" class="sketch"></div>
+        <div class="sketch-wrapper sketch-wrapper--responsive">
+          <div id="sketch" class="sketch"></div>
+
+          <!-- Observers Table -->
+          <div>
+            <observers-table inline-template>
+              <div class="table-wrapper">
+                <table class="observers-table">
+                  <thead>
+                    <th>Image</th>
+                    <th>Speed</th>
+                    <th>Gamma</th>
+                    <th>Axis Toggle</th>
+                    <th>Match Speed</th>
+                    <th>Change Speed</th>
+                    <th>Delete</th>
+                  </thead>
+
+                  <tbody>
+                    <template v-for="(observer, index) in observers">
+                      <observers-table-row :observer="observer" :key="index" />
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+            </observers-table>
+
+            <!-- Controls-->
+            <sketch-controls inline-template>
+              <div class="controls">
+
+                <p class="buttons-container">
+                  <button @click="addObserver">Add observer</button>
+                </p>
+              </div>
+            </sketch-controls>
+          </main>
+          </div>
+        </div>
       </div>
 
-      <!-- Controls-->
-      <sketch-controls inline-template>
-        <div class="controls">
-          <h3>Observer Table</h3>
-          <observers-table inline-template>
-            <div>
-              <table class="observers-table">
-                <thead>
-                  <th>Image</th>
-                  <th>Relative Speed</th>
-                  <th>Gamma</th>
-                  <th>Axis Toggle</th>
-                  <th>Match Speed</th>
-                  <th>Change Speed</th>
-                  <th>Delete Observer</th>
-                </thead>
-
-                <tbody>
-                  <template v-for="(observer, index) in observers">
-                    <observers-table-row :observer="observer" :key="index" />
-                  </template>
-                </tbody>
-              </table>
-            </div>
-          </observers-table>
-
-          <p class="buttons-container">
-            <button @click="addObserver">Add observer</button>
-          </p>
-        </div>
-      </sketch-controls>
-    </main>
   </body>
 
   <script type="text/x-template" id="observers-table-row-template">
@@ -77,9 +78,9 @@
       <td>{{ gamma }}</td>
       <td><button v-if="observer.showGrid" @click="observer.showGrid = false"> Hide </button>
           <button v-else @click="observer.showGrid = true"> Show </button></td>
-      <td><button @click="matchSpeed">Match Observer speed</button></td>
-      <td><button @click="changeSpeed">Change Observer Speed</button></td>
-      <td><button @click="deleteObserver">X</button></td>
+      <td><button @click="matchSpeed">Match</button></td>
+      <td><button @click="changeSpeed">Change</button></td>
+      <td><button @click="deleteObserver">💥</button></td>
     </tr>
   </script>
 </html>
