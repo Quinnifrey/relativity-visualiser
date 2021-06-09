@@ -260,7 +260,13 @@ function setupControls(options) {
         );
       },
 
-      gamma() {
+      lengthContraction() {
+        return (1/gamma(this.relativeSpeed)).toLocaleString(undefined, {
+          minimumFractionDigits: 3,
+          maximumFractionDigits: 3,
+        });
+      },
+      timeDilation() {
         return gamma(this.relativeSpeed).toLocaleString(undefined, {
           minimumFractionDigits: 3,
           maximumFractionDigits: 3,

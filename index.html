@@ -35,12 +35,13 @@
               <div class="table-wrapper">
                 <table class="observers-table">
                   <thead>
-                    <th>Image</th>
-                    <th>Speed</th>
-                    <th>Gamma</th>
-                    <th>Axis toggle</th>
-                    <th>Match speed</th>
-                    <th>Change speed</th>
+                    <th>Object</th>
+                    <th>Relative<br/>Speed</th>
+                    <th>Time<br/>Dilation</th>
+                    <th>Length<br/>Contraction</th>
+                    <th>Gridlines</th>
+                    <th>Travel<br/>With</th>
+                    <th>Change<br/>Relative<br/>Speed</th>
                     <th>Delete</th>
                   </thead>
 
@@ -58,7 +59,7 @@
               <div class="controls">
 
                 <p class="buttons-container">
-                  <button @click="addObserver">Add observer</button>
+                  <button @click="addObserver">Add Object</button>
                 </p>
               </div>
             </sketch-controls>
@@ -75,7 +76,8 @@
         <img :src="observer.spriteUrl()" />
       </td>
       <td>{{ relativeSpeed }}</td>
-      <td>{{ gamma }}</td>
+      <td>{{ timeDilation }}</td>
+      <td>{{ lengthContraction }}</td>
       <td>
         <button v-if="observer.showGrid" @click="observer.showGrid = false"> Hide </button>
         <button v-else @click="observer.showGrid = true"> Show </button>
