@@ -264,16 +264,19 @@ const relativitySketchConstructor = (sketch) => {
 
 
     for (const observer of observers) {
-
-
-      //
       const speed = absoluteToRelativeSpeed(observer.speed, perspectiveSpeed);
+
+      sketch.push();
+      sketch.translate(-speed * grid.windowHeight,0)
+      
+      sketch.applyMatrix(1/lorentzTransform(speed)[0],0,0,1,0,0)
 
       sketch.image(
         getSprite(observer.spriteUrl()),
-        -speed * grid.windowHeight,
+        0,
         0
       );
+      sketch.pop()
     }
 
     sketch.pop();
