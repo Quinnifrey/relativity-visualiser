@@ -120,9 +120,8 @@ function setupSketchOptions() {
 function addObservers(options) {
   const { observers } = options;
 
-  observers.push(new Observer(0, 0.5, true));
-  observers.push(new Observer(1, 0, true));
-  observers.push(new Observer(2, -0.25, false));
+  observers.push(new Observer(0, 0, true));
+
 }
 
 /**
